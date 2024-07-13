@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <h1>Detalhes da pessoa</h1>
+
+<ul>
+    <li>ID: {{pessoa.id}}</li>
+    <li>NOME: {{pessoa.nome}}</li>
+    <li>CPF: {{pessoa.cpf}}</li>
+    <li>IDADE: {{pessoa.idade}}</li>
+    <li>RG: {{pessoa.rg}}</li>
+    <a href="{% url 'list' %}" class="btn btn-primary btn-sm">voltar</a>
+    
+</ul>
+{% endblock %}

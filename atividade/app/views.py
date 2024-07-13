@@ -1,42 +1,47 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Pessoa
+from django.db.models import Q
+from app.forms import PessoaForm
 
 
+def delete(request):
+    pass
+
+def create(request):
+    pass
 def update(request):
     pass
 
-def delete(request):
-    pass
-#create
-def delete(request):
-    pass
+def add(request):
+    if request.method == "POST":
+        form = PessoaForm(request.POST)
 
+        if form.is_valid:
+            form.save()
+            return HttpResponseRedirect('/list/')
+    else:
+        form = PessoaForm()
 
-#read
-def create(request):
-    pass
+    return render(request, "pessoa/add.html", {"form": form})
+
 
 def list(request):
-    pass
-#read
-def detail(request):
-    if request.GET:
-        valor = request.GET['q']
-        pessoas = Pessoa.objects.all().filter(cpf__contains=valor)
+
+    obj = request.GET.get('obj')
+    if obj:
+        pessoas = Pessoa.objects.filter(
+            Q(nome__icontains=obj) |
+            Q(cpf__contains=obj) |
+            Q(id__contains=obj)
+            )
+
     else:
-        pessoas = Pessoa.objects.get(all)
+        pessoas = Pessoa.objects.all()
         
+    return render(request, "pessoa/index.html", {'pessoas':pessoas})
 
-    html = "<table>"
+def detail(request, pessoa_id):
+    pessoa = Pessoa.objects.get(pk=pessoa_id)
 
-    for pessoa in pessoas:
-        html += "<tr>"
-        html += "<td>"+ str(pessoa.id)+"</td>"
-        html += "<td>"+ str(pessoa.cfp)+"</td>"
-        html += "<td>"+ pessoa.nome+"</td>"
-        html += "<td>"+ str(pessoa.idade)+"</td>"
-        html += "</tr>"
-        html += "</table>"
-
-        return HttpResponse(html)
+    return render(request, "pessoa/detalhes.html",{'pessoa': pessoa} )

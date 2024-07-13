@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<form action="/add/" method="POST">
+    {% csrf_token %}
+
+    {{form}}
+
+    <a href="{% url 'list' %}" class="btn btn-danger btn-sm">Voltar</a>
+    <input type="submit" value="Salvar" class="btn btn-primary btn-sm">
+</form>
+{% endblock %}
